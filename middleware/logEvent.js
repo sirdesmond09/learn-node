@@ -9,7 +9,7 @@ const path = require("path");
 
 const logEvents = async (message, logName) => {
     const dateTime = `${format(new Date(), "yyyy-MM-dd\tHH:mm:ss")}`;
-    const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
+    const logItem = `${dateTime}\t${message}\n`;
     console.log(logItem);
 
     try {
