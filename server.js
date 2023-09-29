@@ -2,9 +2,13 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
-const corsOptions = require("./config/corsOptions")
-const {logger} = require('./middleware/logEvent')
-const errorHandler = require('./middleware/errorHandler')
+const corsOptions = require("./config/corsOptions");
+const credentials  = require("./middleware/credentials");
+const {logger} = require('./middleware/logEvent');
+const errorHandler = require('./middleware/errorHandler');
+const verifyJWT  = require("./middleware/verifyJWT");
+const cookieParser = require("cookie-parser");
+
 const PORT = process.env.PORT || 3500;
 
 ////MIDDLEWARE
@@ -12,7 +16,7 @@ const PORT = process.env.PORT || 3500;
 //custom logger middleware
 app.use(logger);
 
-
+app.use(credentials)
 app.use(cors(corsOptions));
 
 // Built-in middleware to handle urlencoded data
@@ -25,10 +29,17 @@ app.use(express.json());
 
 //serve static files
 app.use("/", express.static(path.join(__dirname, '/public')));
-
+//cookies middleware
+app.use(cookieParser());
 
 //routes
 app.use('/', require('./routes/root'));
+app.use('/register', require('./routes/apis/register'));
+app.use('/login', require('./routes/apis/auth'));
+app.use('/refresh', require('./routes/apis/refresh'));
+app.use('/logout', require('./routes/apis/logout'));
+
+app.use(verifyJWT);
 app.use('/employees', require('./routes/apis/employees'));
 
 
@@ -50,3 +61,8 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+
+// require('crypto').randomBytes(64).toString('hex')
+// generate key
