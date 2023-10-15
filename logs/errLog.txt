@@ -1,1 +1,4 @@
 2023-09-19	10:34:22	67b1dc3c-f239-4d49-9692-1d10b3fe046d	TypeError: fsPromises.readFil is not a function
+2023-10-05	10:45:02	TypeError: allowedOrigins.include is not a function
+2023-10-05	10:52:03	TypeError: Cannot read properties of undefined (reading 'username')
+2023-10-05	10:53:03	TypeError: Cannot read properties of undefined (reading 'username')

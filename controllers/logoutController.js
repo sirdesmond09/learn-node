@@ -15,7 +15,7 @@ const handleLogout = (req, res)=>{
     
     const user = usersDB.users.find(person => person.refreshToken ===refreshToken);
     if (!user) {
-        res.clearCookie("jwt", {httpOnly:true, sameSite:None, secure:true});
+        res.clearCookie("jwt", {httpOnly:true, sameSite:'None', secure:true});
         res.sendStatus(204);
     };
     const otherUsers = usersDB.users.filter(person => person.refreshToken !== user.refreshToken);
@@ -25,7 +25,7 @@ const handleLogout = (req, res)=>{
             path.join(__dirname, "..", "model", "users.json"),
             JSON.stringify(usersDB.users)
         );
-        res.clearCookie("jwt", {httpOnly:true, sameSite:None, secure:true}); //in production, when setting the cookies in login always set secure: true so that it sennds over https
+        res.clearCookie("jwt", {httpOnly:true, sameSite:'None', secure:true}); //in production, when setting the cookies in login always set secure: true so that it sennds over https
         return res.sendStatus(204);
 
 }   

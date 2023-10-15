@@ -22,10 +22,15 @@ const handleLogin = async (req, res)=>{
     if (!user) return res.status(401).json({"message":"invalid credentials"})
     const match = await bcrypt.compare(password, user.password)
     if (match) {
+        const roles = Object.values(user.roles)
         const accessToken = jwt.sign(
-            {"username":user.username},
+            {"userInfo":{ 
+                "username":user.username,
+                "roles":roles
+                }
+            },
             process.env.ACCESS_TOKEN_SECRET,
-            {expiresIn:"20s"}
+            {expiresIn:"1m"}
         );
         
         const refreshToken = jwt.sign(
@@ -41,7 +46,7 @@ const handleLogin = async (req, res)=>{
             path.join(__dirname, "..", "model", "users.json"),
             JSON.stringify(usersDB.users)
         );
-        res.cookie("jwt", refreshToken, {httpOnly:true, maxAge:24*60*60*1000, sameSite:None, secure:true});
+        res.cookie("jwt", refreshToken, {httpOnly:true, maxAge:24*60*60*1000, sameSite:'None', secure:true});
         return res.status(200).json({accessToken});
 
     } else{
